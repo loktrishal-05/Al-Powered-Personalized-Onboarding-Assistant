@@ -1,0 +1,147 @@
+{
+  "theme_and_colors": {
+    "mode": "dark",
+    "archetype": "Enterprise Dark / Linear App",
+    "base": {
+      "background_primary": "#0A0F1E",
+      "background_secondary": "#111626",
+      "surface_card": "#13192B",
+      "surface_elevated": "#1A2238"
+    },
+    "brand": {
+      "primary": "#2563EB",
+      "highlight": "#C9A84C",
+      "error": "#EF4444",
+      "success": "#10B981"
+    },
+    "text": {
+      "primary": "#FFFFFF",
+      "secondary": "#A1A1AA",
+      "muted": "#71717A"
+    },
+    "borders": {
+      "subtle": "rgba(255,255,255,0.06)",
+      "focus": "#2563EB",
+      "accent_gold": "#C9A84C"
+    },
+    "rules": {
+      "gradients": "Use subtle radial gradients behind cards or in the background to create 'glow' rather than flat colors. For instance, a soft blue glow behind the active 'Today's Tasks' card.",
+      "borders": "Linear style borders: mostly 1px solid rgba(255,255,255,0.06). For active/highlighted states, use a gradient border (Tracing Beam effect) transitioning from transparent to #2563EB or #C9A84C.",
+      "hover_states": "Items should lighten slightly on hover (e.g. bg-white/5) and text should brighten to #FFFFFF. Never rely on color inheritance.",
+      "glassmorphism": "Used selectively on sticky headers and tooltips: backdrop-blur-xl bg-[#0A0F1E]/70 with a 1px border-b border-white/10."
+    }
+  },
+  "typography": {
+    "fonts": {
+      "headings": "'Plus Jakarta Sans', sans-serif",
+      "body": "'Inter', sans-serif"
+    },
+    "hierarchy": {
+      "h1": "text-4xl sm:text-5xl font-black tracking-tighter text-white",
+      "h2": "text-2xl sm:text-3xl font-bold tracking-tight text-white",
+      "h3": "text-xl font-semibold tracking-tight text-white/90",
+      "body": "text-base text-[#A1A1AA] leading-relaxed",
+      "small_caps": "text-xs font-bold uppercase tracking-[0.2em] text-[#A1A1AA]",
+      "nav_links": "text-sm font-medium text-[#A1A1AA] hover:text-white transition-colors"
+    },
+    "rules": {
+      "contrast": "Ensure all text meets WCAG AA standards. Place soft text-shadows on headers if they overlay any glowing background elements.",
+      "alignment": "Strict left-alignment for all dashboard and data tables. Center alignment is only permitted on the Login hero."
+    }
+  },
+  "spacing_and_layout": {
+    "grid_system": {
+      "dashboard": "Bento 'Control Room' Grid (grid-cols-1 md:grid-cols-3 lg:grid-cols-4) with gap-6. Density is high, utilize full height of cards.",
+      "marketing_login": "Tetris Grid, heavy asymmetry and vast negative space."
+    },
+    "containers": {
+      "page_padding": "px-6 py-8 md:px-12 md:py-12",
+      "card_padding": "p-6",
+      "border_radius": "rounded-lg (max 8px). Avoid overly rounded shapes to maintain the enterprise Linear/Notion feel."
+    }
+  },
+  "components_strategy": {
+    "base_library": "shadcn/ui",
+    "customizations": {
+      "cards": "Remove default heavy shadows. Use flat #13192B backgrounds with 1px rgba(255,255,255,0.06) borders. Inner shadow shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] for a subtle top highlight.",
+      "buttons": "Primary: bg-[#2563EB] text-white hover:bg-[#1D4ED8] with ring-2 ring-blue-500/20. Secondary/Ghost: bg-white/5 text-white hover:bg-white/10.",
+      "tables": "HR Cohort Table: Notion-style. border-collapse, minimal horizontal borders (border-b border-white/5). text-sm. Hovering a row highlights it subtly.",
+      "progress_rings": "Use Recharts or framer-motion SVG circles. Background circle: stroke-white/10. Progress circle: stroke-[#2563EB] or stroke-[#C9A84C] depending on role.",
+      "inputs": "bg-[#111626] border-white/10 text-white focus:border-[#2563EB] focus:ring-1 focus:ring-[#2563EB].",
+      "navigation": "Top navigation should be sticky glassmorphism. Left sidebar for HR view should be solid #0A0F1E with subtle right border."
+    }
+  },
+  "role_journeys": {
+    "software_engineer": {
+      "color": "#2563EB (Electric Blue)",
+      "visual_cue": "Task cards have a 1px left border of #2563EB. Progress rings and badges glow blue.",
+      "iconography": "Code, Terminal, Git branches, Server stacks."
+    },
+    "marketing_manager": {
+      "color": "#C9A84C (Soft Gold)",
+      "visual_cue": "Task cards have a 1px left border of #C9A84C. Progress rings and badges glow gold.",
+      "iconography": "Megaphone, Analytics charts, Target audience, Broadcast."
+    }
+  },
+  "animations": {
+    "progress_rings": "Animate 'strokeDashoffset' from max to target value over 1.5s with an ease-out curve on load.",
+    "task_cards": "Staggered slide-up: initial opacity-0 translate-y-4, animate to opacity-100 translate-y-0. Stagger children by 0.1s.",
+    "hover_effects": "Micro-interactions: Cards translate-y-[-2px] with duration-200 ease-out on hover. Buttons scale slightly (0.98 on active).",
+    "accessibility": "Wrap complex motion in prefers-reduced-motion media query checks."
+  },
+  "icons_and_assets": {
+    "icon_library": "@phosphor-icons/react (Weight: Duotone for role badges, Regular for standard UI).",
+    "images": {
+      "login_background": {
+        "url": "https://images.unsplash.com/photo-1771930396943-0f61401be465?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1ODh8MHwxfHNlYXJjaHwxfHxkYXJrJTIwYWJzdHJhY3QlMjB0ZWNobm9sb2d5JTIwbWVzaCUyMGJsdWUlMjBnb2xkJTIwYmFja2dyb3VuZHxlbnwwfHx8fDE3NzUxOTg3MTh8MA&ixlib=rb-4.1.0&q=85",
+        "alt": "Abstract dark blue and gold mesh",
+        "usage": "Use as a full-screen, low-opacity (20%) background behind the login form to add texture."
+      },
+      "hr_avatars": [
+        "https://images.unsplash.com/photo-1765776830139-72b2184dae5a",
+        "https://images.unsplash.com/photo-1769636929231-3cd7f853d038",
+        "https://images.unsplash.com/photo-1766022411633-e88e3650538b",
+        "https://images.unsplash.com/photo-1758534063829-a72058381e21",
+        "https://images.pexels.com/photos/262391/pexels-photo-262391.jpeg"
+      ]
+    },
+    "brand_logo": "Render as text: 'Copilot' in Plus Jakarta Sans font-black, with a glowing #2563EB dot '.' at the end. Do not use stock images for the logo."
+  },
+  "page_specific_instructions": {
+    "login": {
+      "layout": "Center-aligned form modal floating over the abstract background image (with heavy vignette/blur).",
+      "elements": "Email, Password, Role selector (SWE vs Marketing), Login button."
+    },
+    "onboarding_setup": {
+      "layout": "Bento grid, step-by-step intake. Cards should overlap slightly or use nested borders to look like a high-end IDE config page."
+    },
+    "employee_dashboard": {
+      "layout": "Control Room grid. Highlight 'TODAY' natively by making today's task card have a prominent Tracing Beam border.",
+      "elements": "Timeline, Today's Top 3 Tasks (Slide in on scroll), AI Chat Widget (Bottom right, floating, glassmorphic)."
+    },
+    "plan_90_day": {
+      "layout": "Timeline view with large, animating Progress Rings for 30, 60, and 90 day milestones."
+    },
+    "hr_cohort_dashboard": {
+      "layout": "Wide container. Top row: Aggregate stats (Cards). Bottom: Dense Notion-style table.",
+      "elements": "Status badges (Compliance, Access, Engagement) should be small caps pills with subtle background tints (e.g., bg-green-500/10 text-green-400)."
+    },
+    "hr_employee_deep_dive": {
+      "layout": "Two columns: 1. Employee stats & signals. 2. Human Override Panel (Form controls to force-complete tasks or trigger nudges)."
+    },
+    "admin_audit": {
+      "layout": "Monospace typography (Inter or JetBrains Mono if available) for log rows. Strict tabular data."
+    }
+  },
+  "testing_attributes": {
+    "rule": "All interactive elements, buttons, inputs, tabs, and key data points MUST include a `data-testid` attribute (e.g., data-testid='login-submit-button', data-testid='today-task-1', data-testid='progress-ring-30')."
+  },
+  "dependencies_to_install": [
+    "lucide-react",
+    "@phosphor-icons/react",
+    "framer-motion",
+    "recharts",
+    "clsx",
+    "tailwind-merge"
+  ]
+}
