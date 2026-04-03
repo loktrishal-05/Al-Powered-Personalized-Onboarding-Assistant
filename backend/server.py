@@ -323,15 +323,37 @@ async def get_cohort(user=Depends(get_current_user)):
     if user["role"] not in ("hr_admin", "manager"):
         raise HTTPException(status_code=403, detail="Access denied")
     employees = await db.employees.find({}, {"_id": 0}).to_list(100)
+
+    # Aggregated counts in 3 queries instead of 6*N
+    ms_stats = {doc["_id"]: doc async for doc in db.milestones.aggregate([
+        {"$group": {
+            "_id": "$employee_id",
+            "total": {"$sum": 1},
+            "completed": {"$sum": {"$cond": ["$is_completed", 1, 0]}},
+            "pending_access": {"$sum": {"$cond": [
+                {"$and": [{"$eq": ["$category", "access"]}, {"$ne": ["$is_completed", True]}]}, 1, 0
+            ]}}
+        }}
+    ])}
+    lms_stats = {doc["_id"]: doc async for doc in db.lms_assignments.aggregate([
+        {"$group": {
+            "_id": "$employee_id",
+            "total": {"$sum": 1},
+            "completed": {"$sum": {"$cond": [{"$eq": ["$status", "completed"]}, 1, 0]}}
+        }}
+    ])}
+    chat_stats = {doc["_id"]: doc async for doc in db.chat_messages.aggregate([
+        {"$match": {"role": "user"}},
+        {"$group": {"_id": "$employee_id", "count": {"$sum": 1}}}
+    ])}
+
     result = []
     for emp in employees:
         eid = emp["employee_id"]
-        total = await db.milestones.count_documents({"employee_id": eid})
-        completed = await db.milestones.count_documents({"employee_id": eid, "is_completed": True})
-        lms_total = await db.lms_assignments.count_documents({"employee_id": eid})
-        lms_done = await db.lms_assignments.count_documents({"employee_id": eid, "status": "completed"})
-        pending_access = await db.milestones.count_documents({"employee_id": eid, "category": "access", "is_completed": False})
-        chat_count = await db.chat_messages.count_documents({"employee_id": eid, "role": "user"})
+        ms = ms_stats.get(eid, {"total": 0, "completed": 0, "pending_access": 0})
+        ls = lms_stats.get(eid, {"total": 0, "completed": 0})
+        total = ms["total"]
+        completed = ms["completed"]
         start = datetime.fromisoformat(emp["start_date"]).replace(tzinfo=timezone.utc)
         day_in_journey = (datetime.now(timezone.utc) - start).days
         pct = round((completed / total * 100) if total > 0 else 0)
@@ -340,8 +362,9 @@ async def get_cohort(user=Depends(get_current_user)):
             **emp, "day_in_journey": day_in_journey,
             "total_milestones": total, "completed_milestones": completed,
             "progress_pct": pct, "status": status,
-            "lms_total": lms_total, "lms_completed": lms_done,
-            "pending_access": pending_access, "chat_count": chat_count
+            "lms_total": ls["total"], "lms_completed": ls["completed"],
+            "pending_access": ms["pending_access"],
+            "chat_count": chat_stats.get(eid, {}).get("count", 0)
         })
     return result
 
