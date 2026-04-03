@@ -1,34 +1,80 @@
-.App-logo {
-    height: 40vmin;
-    pointer-events: none;
+/* Global App Styles */
+.glass-header {
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  background: rgba(10, 15, 30, 0.7);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-    .App-logo {
-        animation: App-logo-spin infinite 20s linear;
-    }
+.glass-card {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  background: rgba(19, 25, 43, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
-.App-header {
-    background-color: #0f0f10;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: calc(10px + 2vmin);
-    color: white;
+.tracing-beam {
+  border-image: linear-gradient(to bottom, transparent, #2563EB, transparent) 1;
 }
 
-.App-link {
-    color: #61dafb;
+.tracing-beam-gold {
+  border-image: linear-gradient(to bottom, transparent, #C9A84C, transparent) 1;
 }
 
-@keyframes App-logo-spin {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
+/* Animations */
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.3); }
+  50% { box-shadow: 0 0 20px 4px rgba(37, 99, 235, 0.15); }
+}
+
+.animate-slide-up {
+  animation: slideUp 0.5s ease-out forwards;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+.stagger-1 { animation-delay: 0.1s; }
+.stagger-2 { animation-delay: 0.2s; }
+.stagger-3 { animation-delay: 0.3s; }
+.stagger-4 { animation-delay: 0.4s; }
+.stagger-5 { animation-delay: 0.5s; }
+
+/* Phase colors */
+.phase-day-0-7 { border-left-color: #10B981; }
+.phase-week-2-4 { border-left-color: #2563EB; }
+.phase-day-30-60 { border-left-color: #C9A84C; }
+.phase-day-60-90 { border-left-color: #8B5CF6; }
+
+/* Status badges */
+.status-on-track { background: rgba(16, 185, 129, 0.1); color: #10B981; }
+.status-at-risk { background: rgba(201, 168, 76, 0.1); color: #C9A84C; }
+.status-behind { background: rgba(239, 68, 68, 0.1); color: #EF4444; }
+.status-completed { background: rgba(16, 185, 129, 0.1); color: #10B981; }
+.status-in-progress { background: rgba(37, 99, 235, 0.1); color: #2563EB; }
+.status-not-started { background: rgba(113, 113, 122, 0.1); color: #71717A; }
+.status-overdue { background: rgba(239, 68, 68, 0.1); color: #EF4444; }
+
+/* Chat widget */
+.chat-bubble-user {
+  background: #2563EB;
+  border-radius: 16px 16px 4px 16px;
+}
+
+.chat-bubble-assistant {
+  background: #1A2238;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px 16px 16px 4px;
 }

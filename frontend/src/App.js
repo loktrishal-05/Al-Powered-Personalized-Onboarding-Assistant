@@ -1,53 +1,49 @@
-import { useEffect } from "react";
-import "@/App.css";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import axios from "axios";
+import React from 'react';
+import '@/App.css';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { AuthProvider } from '@/contexts/AuthContext';
+import ProtectedRoute from '@/components/ProtectedRoute';
+import LoginPage from '@/pages/LoginPage';
+import AuthCallback from '@/pages/AuthCallback';
+import EmployeeDashboard from '@/pages/EmployeeDashboard';
+import PlanView from '@/pages/PlanView';
+import HRDashboard from '@/pages/HRDashboard';
+import HREmployeeDetail from '@/pages/HREmployeeDetail';
+import AuditLog from '@/pages/AuditLog';
+import OnboardingSetup from '@/pages/OnboardingSetup';
+import { Toaster } from '@/components/ui/sonner';
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-const API = `${BACKEND_URL}/api`;
+function AppRouter() {
+  const location = useLocation();
 
-const Home = () => {
-  const helloWorldApi = async () => {
-    try {
-      const response = await axios.get(`${API}/`);
-      console.log(response.data.message);
-    } catch (e) {
-      console.error(e, `errored out requesting / api`);
-    }
-  };
-
-  useEffect(() => {
-    helloWorldApi();
-  }, []);
+  // Check URL fragment for session_id synchronously during render
+  if (location.hash?.includes('session_id=')) {
+    return <AuthCallback />;
+  }
 
   return (
-    <div>
-      <header className="App-header">
-        <a
-          className="App-link"
-          href="https://emergent.sh"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <img src="https://avatars.githubusercontent.com/in/1201222?s=120&u=2686cf91179bbafbc7a71bfbc43004cf9ae1acea&v=4" />
-        </a>
-        <p className="mt-5">Building something incredible ~!</p>
-      </header>
-    </div>
+    <Routes>
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/dashboard" element={<ProtectedRoute><EmployeeDashboard /></ProtectedRoute>} />
+      <Route path="/plan" element={<ProtectedRoute><PlanView /></ProtectedRoute>} />
+      <Route path="/onboarding/setup" element={<ProtectedRoute><OnboardingSetup /></ProtectedRoute>} />
+      <Route path="/hr" element={<ProtectedRoute roles={['hr_admin', 'manager']}><HRDashboard /></ProtectedRoute>} />
+      <Route path="/hr/employee/:id" element={<ProtectedRoute roles={['hr_admin', 'manager']}><HREmployeeDetail /></ProtectedRoute>} />
+      <Route path="/admin/audit" element={<ProtectedRoute roles={['hr_admin']}><AuditLog /></ProtectedRoute>} />
+      <Route path="/" element={<Navigate to="/login" replace />} />
+      <Route path="*" element={<Navigate to="/login" replace />} />
+    </Routes>
   );
-};
+}
 
 function App() {
   return (
-    <div className="App">
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home />}>
-            <Route index element={<Home />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
-    </div>
+    <BrowserRouter>
+      <AuthProvider>
+        <AppRouter />
+        <Toaster />
+      </AuthProvider>
+    </BrowserRouter>
   );
 }
 
